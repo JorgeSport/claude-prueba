@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slider de Productos Profesional</title>
+    
+    <!-- Metadatos Open Graph -->
+    <meta property="og:title" content="Catálogo de Productos" />
+    <meta property="og:description" content="Descubre nuestra colección de 12 productos destacados con imágenes, descripciones y más información." />
+    <meta property="og:image" content="https://res.cloudinary.com/detstbpo9/image/upload/v1742389635/Dise%C3%B1o_sin_t%C3%ADtulo_1_sacbem.png" />
+    <meta property="og:url" content="https://www.tudominio.com/productos" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Tu Marca" />
+    
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Catálogo de Productos">
+    <meta name="twitter:description" content="Descubre nuestra colección de 12 productos destacados con imágenes, descripciones y más información.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/detstbpo9/image/upload/v1741310453/473754598_9038809056156606_499351101841993501_n_ucfgjb.jpg">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            max-width: 180px;
+            height: auto;
+        }
+        
+        .slider-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+        }
+        
+        .slide-content {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+        }
+        
+        .slide-image {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slide-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Cambiado de 'cover' a 'contain' */
+            transition: transform 0.3s ease;
+        }
+        
+        .slide:hover .slide-image img {
+            transform: scale(1.05);
+        }
+        
+        .slide-info {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .slide-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        
+        .slide-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            text-align: center;
+            width: fit-content;
+        }
+        
+        .slide-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        
+        .btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+        }
+        
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .dot.active {
+            background-color: #3498db;
+        }
+        
+        /* Responsive design mejorado */
+        @media (max-width: 992px) {
+            .slide-content {
+                flex-direction: column;
+            }
+            
+            .slide-image, .slide-info {
+                width: 100%;
+            }
+            
+            .slide-image {
+                height: 300px; /* Altura fija para mostrar imagen completa */
+                background-color: #f9f9f9; /* Fondo para la imagen */
+            }
+            
+            .slide-image img {
+                object-fit: contain; /* Asegura que la imagen completa sea visible */
+                max-height: 100%;
+                padding: 10px; /* Espacio alrededor de la imagen */
+            }
+            
+            .slide-info {
+                padding: 30px;
+            }
+            
+            .slide-title {
+                font-size: 24px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .slide-image {
+                height: 250px; /* Altura más pequeña para móviles */
+            }
+            
+            .slide-info {
+                padding: 20px;
+            }
+            
+            .slide-title {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+            
+            .slide-description {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+            
+            .slide-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://res.cloudinary.com/detstbpo9/image/upload/v1742382942/logo_jboej9.png" alt="Logo" class="logo">
+        </div>
+        
+        <div class="slider-container">
+            <div class="slider" id="slider">
+                <!-- Slide 1 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="https://res.cloudinary.com/detstbpo9/image/upload/v1741310453/473754598_9038809056156606_499351101841993501_n_ucfgjb.jpg" alt="Producto 1">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 1</h2>
+                            <p class="slide-description">Descripción corta del producto 1. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="https://res.cloudinary.com/detstbpo9/image/upload/v1741619309/mochila-de-montana-y-trekking-35-l-quechua-mh100_1_guzvyz.avif" alt="Producto 2">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 2</h2>
+                            <p class="slide-description">Descripción corta del producto 2. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="https://res.cloudinary.com/detstbpo9/image/upload/v1741363712/botas-de-montana-y-trekking-impermeables-ninos-35-a-38-quechua-crossrock_1_pxh5sn.avif" alt="Producto 3">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 3</h2>
+                            <p class="slide-description">Descripción corta del producto 3. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="https://res.cloudinary.com/detstbpo9/image/upload/v1741310546/473802206_9038769129493932_262653937644164638_n_mbug9x.jpg">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 4</h2>
+                            <p class="slide-description">Descripción corta del producto 4. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 5 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 5">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 5</h2>
+                            <p class="slide-description">Descripción corta del producto 5. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 6 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 6">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 6</h2>
+                            <p class="slide-description">Descripción corta del producto 6. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 7 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 7">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 7</h2>
+                            <p class="slide-description">Descripción corta del producto 7. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 8 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 8">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 8</h2>
+                            <p class="slide-description">Descripción corta del producto 8. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 9 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 9">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 9</h2>
+                            <p class="slide-description">Descripción corta del producto 9. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 10 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 10">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 10</h2>
+                            <p class="slide-description">Descripción corta del producto 10. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 11 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 11">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 11</h2>
+                            <p class="slide-description">Descripción corta del producto 11. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 12 -->
+                <div class="slide">
+                    <div class="slide-content">
+                        <div class="slide-image">
+                            <img src="/api/placeholder/600/400" alt="Producto 12">
+                        </div>
+                        <div class="slide-info">
+                            <h2 class="slide-title">Producto 12</h2>
+                            <p class="slide-description">Descripción corta del producto 12. Aquí puedes agregar características principales o beneficios del producto.</p>
+                            <a href="#" class="slide-button">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn" id="prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn" id="next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="dots" id="dots">
+            <!-- Dots will be generated by JavaScript -->
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slider = document.getElementById('slider');
+            const slides = document.querySelectorAll('.slide');
+            const dotsContainer = document.getElementById('dots');
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            let currentIndex = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+            
+            const dots = document.querySelectorAll('.dot');
+            
+            // Set initial position
+            updateSlider();
+            
+            // Event listeners
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            
+            // Auto slide (optional)
+            let interval = setInterval(nextSlide, 5000);
+            
+            function updateSlider() {
+                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Update active dot
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+            }
+            
+            function prevSlide() {
+                currentIndex = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
+                updateSlider();
+                resetInterval();
+            }
+            
+            function nextSlide() {
+                currentIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
+                updateSlider();
+                resetInterval();
+            }
+            
+            function goToSlide(index) {
+                currentIndex = index;
+                updateSlider();
+                resetInterval();
+            }
+            
+            function resetInterval() {
+                clearInterval(interval);
+                interval = setInterval(nextSlide, 5000);
+            }
+            
+            // Touch events for mobile
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            slider.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            slider.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                if (touchStartX - touchEndX > 50) {
+                    nextSlide();
+                } else if (touchEndX - touchStartX > 50) {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
